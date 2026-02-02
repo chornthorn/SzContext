@@ -62,6 +62,25 @@ This project uses **Swift Package Manager** for dependency management.
 
 This project has been migrated from CocoaPods to Swift Package Manager. If you have an older version of the project, please refer to [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) for detailed migration instructions.
 
+#### Project Structure
+
+This project follows Swift Package Manager standard folder structure:
+
+```
+SzContext/
+├── Sources/                    # All source code (SPM standard)
+│   ├── SzContextShared/       # Shared library
+│   ├── SzContextApp/          # Main application
+│   ├── SzContextExtension/    # Finder Sync Extension
+│   └── SzContextHelper/       # XPC Helper Service
+├── Tests/                      # Test suites
+│   └── SzContextTests/
+├── Package.swift               # SPM manifest
+└── SzContext.xcodeproj/       # Xcode project
+```
+
+For more details on the structure, see [FOLDER_STRUCTURE.md](FOLDER_STRUCTURE.md).
+
 ### Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
