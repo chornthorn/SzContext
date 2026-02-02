@@ -67,23 +67,18 @@ class DependencyResolutionTests: XCTestCase {
     // MARK: - Migration Cleanup Tests
     
     func testPodfileNotInRepository() {
-        // After migration, Podfile should be removed or gitignored
+        // After full SPM migration, Podfile should be completely removed
         let podfilePath = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .appendingPathComponent("Podfile")
         
-        // If Podfile exists, it should be for reference only (documented in migration)
-        // This test documents the expected state after cleanup
-        if FileManager.default.fileExists(atPath: podfilePath.path) {
-            // Podfile exists - this is OK during migration phase
-            // After running cleanup_cocoapods.sh, it should be removed
-            XCTAssertTrue(true, "Podfile present - run cleanup_cocoapods.sh to remove")
-        } else {
-            // Podfile removed - migration cleanup complete
-            XCTAssertTrue(true, "Podfile successfully removed")
-        }
+        // Podfile should not exist - migration is complete
+        XCTAssertFalse(
+            FileManager.default.fileExists(atPath: podfilePath.path),
+            "Podfile should be removed after complete SPM migration"
+        )
     }
     
     func testPodsDirectoryHandling() {
@@ -93,14 +88,11 @@ class DependencyResolutionTests: XCTestCase {
             .deletingLastPathComponent()
             .appendingPathComponent("Pods")
         
-        // Pods directory should be removed or gitignored after migration
-        if FileManager.default.fileExists(atPath: podsPath.path) {
-            // Pods directory exists - migration cleanup pending
-            XCTAssertTrue(true, "Pods directory present - run cleanup_cocoapods.sh to remove")
-        } else {
-            // Pods directory removed - migration complete
-            XCTAssertTrue(true, "Pods directory successfully removed")
-        }
+        // Pods directory should not exist - migration is complete
+        XCTAssertFalse(
+            FileManager.default.fileExists(atPath: podsPath.path),
+            "Pods directory should be removed after complete SPM migration"
+        )
     }
     
     // MARK: - Build Configuration Tests
@@ -199,18 +191,11 @@ class DependencyResolutionTests: XCTestCase {
             .deletingLastPathComponent()
             .appendingPathComponent("SzContext.xcworkspace")
         
-        // Workspace is CocoaPods-generated and should be optional after migration
-        if FileManager.default.fileExists(atPath: workspacePath.path) {
-            XCTAssertTrue(
-                true,
-                "Workspace present - can be removed after migration, open .xcodeproj instead"
-            )
-        } else {
-            XCTAssertTrue(
-                true,
-                "Workspace removed - using .xcodeproj directly"
-            )
-        }
+        // Workspace is CocoaPods-generated and should be removed after full migration
+        XCTAssertFalse(
+            FileManager.default.fileExists(atPath: workspacePath.path),
+            "Workspace should be removed - use .xcodeproj directly after SPM migration"
+        )
     }
 }
 
@@ -241,27 +226,40 @@ extension DependencyResolutionTests {
         }
     }
     
-    func testMigrationDocumentationComplete() {
+    func testMigrationComplete() {
         let projectRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .deletingLastPathComponent()
         
-        // Verify all critical migration docs exist
-        let criticalDocs = [
-            "START_HERE.md",
-            "MIGRATION_GUIDE.md",
-            "SPM_QUICK_REFERENCE.md",
+        // Verify Package.swift exists (the only critical file for SPM)
+        let packagePath = projectRoot.appendingPathComponent("Package.swift")
+        XCTAssertTrue(
+            FileManager.default.fileExists(atPath: packagePath.path),
+            "Package.swift is required for SPM"
+        )
+        
+        // Verify migration artifacts are removed
+        let removedFiles = [
+            "Podfile",
+            "Podfile.lock",
             "cleanup_cocoapods.sh",
-            "Package.swift"
+            "validate_spm_migration.sh"
         ]
         
-        for doc in criticalDocs {
-            let docPath = projectRoot.appendingPathComponent(doc)
-            XCTAssertTrue(
-                FileManager.default.fileExists(atPath: docPath.path),
-                "\(doc) is required for complete migration"
+        for file in removedFiles {
+            let filePath = projectRoot.appendingPathComponent(file)
+            XCTAssertFalse(
+                FileManager.default.fileExists(atPath: filePath.path),
+                "\(file) should be removed after complete migration"
             )
         }
+        
+        // Verify Pods directory is removed
+        let podsPath = projectRoot.appendingPathComponent("Pods")
+        XCTAssertFalse(
+            FileManager.default.fileExists(atPath: podsPath.path),
+            "Pods directory should be removed after complete migration"
+        )
     }
 }
