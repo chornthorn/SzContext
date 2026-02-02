@@ -255,32 +255,6 @@ class SzContextMigrationTests: XCTestCase {
         }
     }
     
-    func testCleanupScriptExists() {
-        let scriptPath = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("cleanup_cocoapods.sh")
-        
-        XCTAssertTrue(
-            FileManager.default.fileExists(atPath: scriptPath.path),
-            "cleanup_cocoapods.sh should exist"
-        )
-        
-        // Verify script is executable
-        if FileManager.default.fileExists(atPath: scriptPath.path) {
-            let attributes = try? FileManager.default.attributesOfItem(atPath: scriptPath.path)
-            let permissions = attributes?[.posixPermissions] as? Int
-            // Check if executable bit is set (at least user executable: 0o100)
-            if let permissions = permissions {
-                XCTAssertTrue(
-                    permissions & 0o100 != 0,
-                    "cleanup_cocoapods.sh should be executable"
-                )
-            }
-        }
-    }
-    
     // MARK: - Build System Tests
     
     func testSwiftVersionCompatibility() {

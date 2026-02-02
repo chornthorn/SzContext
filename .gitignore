@@ -31,9 +31,23 @@ DerivedData/
 *.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 *.xcodeproj/xcshareddata/swiftpm/
 
-## CocoaPods (Legacy - migrated to SPM)
+## Legacy CocoaPods files (removed - fully migrated to SPM)
 Pods/
+Podfile
 Podfile.lock
+*.xcworkspace
+
+## Legacy pre-SPM directories (removed - now using Sources/)
+# These directories were used before migrating to SPM and are now redundant
+# All source code should be in Sources/ following SPM conventions
+/SzContext/
+/Shared/
+/SzContextFinderSyncExtension/
+/SzContextXPCHelper/
+
+## Legacy migration scripts (removed - migration complete)
+cleanup_cocoapods.sh
+validate_spm_migration.sh
 
 ## zip file 
 *.zip
