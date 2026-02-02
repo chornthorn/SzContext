@@ -35,6 +35,7 @@ let package = Package(
             path: "Sources/SzContextShared",
             exclude: [
                 "SzContext.xcdatamodeld",
+                "IconCacheManager.swift",
                 "de.lproj",
                 "en.lproj", 
                 "zh-Hans.lproj",
