@@ -1,0 +1,59 @@
+# Swift Package Manager Test Workflow
+# This workflow runs SPM tests on macOS
+
+name: SPM Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Run SPM Tests
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Swift version
+      run: swift --version
+    
+    - name: Resolve dependencies
+      run: swift package resolve
+    
+    - name: Build package
+      run: swift build --target SzContextShared
+    
+    - name: Run tests
+      run: swift test
+    
+    - name: Run validation script
+      run: ./validate_spm_migration.sh
+
+  build:
+    name: Build Xcode Project
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Build project
+      run: |
+        xcodebuild -project SzContext.xcodeproj \
+                   -scheme SzContext \
+                   -configuration Debug \
+                   clean build
