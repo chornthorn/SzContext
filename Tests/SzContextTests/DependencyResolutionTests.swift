@@ -144,11 +144,20 @@ class DependencyResolutionTests: XCTestCase {
             return
         }
         
-        // Verify shared target exists
-        XCTAssertTrue(
-            packageContent.contains("SzContextShared"),
-            "Package should define SzContextShared target"
-        )
+        // Verify all targets exist
+        let expectedTargets = [
+            "SzContextShared",
+            "SzContextApp",
+            "SzContextExtension",
+            "SzContextHelper"
+        ]
+        
+        for target in expectedTargets {
+            XCTAssertTrue(
+                packageContent.contains(target),
+                "Package should define \(target) target"
+            )
+        }
         
         // Verify test target exists
         XCTAssertTrue(
@@ -159,6 +168,12 @@ class DependencyResolutionTests: XCTestCase {
         XCTAssertTrue(
             packageContent.contains("SzContextTests"),
             "Package should have SzContextTests test target"
+        )
+        
+        // Verify Sources paths
+        XCTAssertTrue(
+            packageContent.contains("Sources/SzContextShared"),
+            "Package should reference Sources/SzContextShared path"
         )
     }
     

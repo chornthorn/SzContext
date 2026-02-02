@@ -28,23 +28,79 @@ class SzContextMigrationTests: XCTestCase {
     }
     
     func testSharedModuleStructure() {
-        // Verify that shared module files are accessible
-        let sharedPath = URL(fileURLWithPath: #filePath)
+        // Verify that shared module files are accessible in new SPM structure
+        let sourcesPath = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
             .deletingLastPathComponent()
-            .appendingPathComponent("Shared")
+            .appendingPathComponent("Sources")
+        
+        let sharedPath = sourcesPath.appendingPathComponent("SzContextShared")
+        
+        XCTAssertTrue(
+            FileManager.default.fileExists(atPath: sourcesPath.path),
+            "Sources directory should exist (SPM standard structure)"
+        )
         
         XCTAssertTrue(
             FileManager.default.fileExists(atPath: sharedPath.path),
-            "Shared directory should exist"
+            "Sources/SzContextShared directory should exist"
         )
         
         // Check for key files
         let constantsPath = sharedPath.appendingPathComponent("Constants.swift")
         XCTAssertTrue(
             FileManager.default.fileExists(atPath: constantsPath.path),
-            "Constants.swift should exist in Shared directory"
+            "Constants.swift should exist in Sources/SzContextShared directory"
+        )
+        
+        // Verify old Shared directory for backward compatibility (may still exist)
+        let legacySharedPath = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Shared")
+        
+        if FileManager.default.fileExists(atPath: legacySharedPath.path) {
+            // Legacy directory exists - this is OK during transition
+            XCTAssertTrue(true, "Legacy Shared/ directory still exists (transition phase)")
+        }
+    }
+    
+    func testSPMStandardStructure() {
+        // Verify SPM standard folder structure
+        let projectRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        
+        let sourcesDir = projectRoot.appendingPathComponent("Sources")
+        XCTAssertTrue(
+            FileManager.default.fileExists(atPath: sourcesDir.path),
+            "Sources/ directory should exist (SPM standard)"
+        )
+        
+        // Verify all target directories exist
+        let expectedTargets = [
+            "SzContextShared",
+            "SzContextApp",
+            "SzContextExtension",
+            "SzContextHelper"
+        ]
+        
+        for target in expectedTargets {
+            let targetPath = sourcesDir.appendingPathComponent(target)
+            XCTAssertTrue(
+                FileManager.default.fileExists(atPath: targetPath.path),
+                "Sources/\(target) should exist"
+            )
+        }
+        
+        // Verify Tests directory at root level
+        let testsDir = projectRoot.appendingPathComponent("Tests")
+        XCTAssertTrue(
+            FileManager.default.fileExists(atPath: testsDir.path),
+            "Tests/ directory should exist at root (SPM standard)"
         )
     }
     
