@@ -35,6 +35,14 @@ DerivedData/
 Pods/
 Podfile.lock
 
+## Legacy pre-SPM directories (now using Sources/)
+# These directories were used before migrating to SPM and are now redundant
+# All source code should be in Sources/ following SPM conventions
+/SzContext/
+/Shared/
+/SzContextFinderSyncExtension/
+/SzContextXPCHelper/
+
 ## zip file 
 *.zip
 *.dmg
