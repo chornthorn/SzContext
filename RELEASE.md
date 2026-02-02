@@ -23,13 +23,13 @@ The project includes a GitHub Actions workflow that automatically builds an unsi
 
 3. Create and push a version tag:
    ```bash
-   git tag v1.5
-   git push origin v1.5
+   git tag vX.Y
+   git push origin vX.Y
    ```
 
 4. The workflow will automatically:
    - Build the SzContext app in unsigned mode
-   - Create a DMG file named `SzContext-1.5-unsigned.dmg`
+   - Create a DMG file named `SzContext-X.Y-unsigned.dmg`
    - Create a GitHub release with the DMG attached
    - Add release notes
 
