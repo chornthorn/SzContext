@@ -272,7 +272,7 @@
 				7AC5E66525B16E1100F76603 /* Util.swift */,
 				7A39C1B525A263C400582C5A /* Localizable.strings */,
 			);
-			path = Shared;
+			path = Sources/SzContextShared;
 			sourceTree = "<group>";
 		};
 		7A4B1DD425A79F5A006C6256 /* SzContextXPCHelper */ = {
