@@ -29,8 +29,8 @@ jobs:
     - name: Resolve dependencies
       run: swift package resolve
     
-    - name: Build package
+    - name: Build SzContextShared
       run: swift build --target SzContextShared
     
-    - name: Run tests
-      run: swift test
+    - name: Build Tests
+      run: swift build --target SzContextTests

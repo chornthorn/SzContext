@@ -8,7 +8,6 @@
 
 import Cocoa
 import FinderSync
-import LQ3C7Y6F8J_com_roadtodream_SzContextXPCHelper
 import OSLog
 
 class FinderSync: FIFinderSync {
