@@ -18,7 +18,7 @@ let package = Package(
         .library(
             name: "SzContextExtension",
             targets: ["SzContextExtension"]),
-        .library(
+        .executable(
             name: "SzContextHelper",
             targets: ["SzContextHelper"]),
     ],
@@ -71,7 +71,7 @@ let package = Package(
         ),
         
         // XPC Helper target
-        .target(
+        .executableTarget(
             name: "SzContextHelper",
             dependencies: ["SzContextShared"],
             path: "Sources/SzContextHelper",
