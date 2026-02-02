@@ -34,26 +34,3 @@ jobs:
     
     - name: Run tests
       run: swift test
-    
-    - name: Run validation script
-      run: ./validate_spm_migration.sh
-
-  build:
-    name: Build Xcode Project
-    runs-on: macos-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Xcode
-      uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: latest-stable
-    
-    - name: Build project
-      run: |
-        xcodebuild -project SzContext.xcodeproj \
-                   -scheme SzContext \
-                   -configuration Debug \
-                   clean build

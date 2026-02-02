@@ -39,6 +39,10 @@ let package = Package(
                 "en.lproj", 
                 "zh-Hans.lproj",
                 "finderGoto.scpt"
+            ],
+            linkerSettings: [
+                .linkedFramework("AppKit"),
+                .linkedFramework("CoreData")
             ]
         ),
         

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 class PreferenceManager {
     static private var ud = UserDefaults.init(suiteName: APP_GROUP)

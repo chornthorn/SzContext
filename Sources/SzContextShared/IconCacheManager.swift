@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-import Cocoa
+import AppKit
 import OSLog
 
 class IconCacheManager: NSPersistentContainer {

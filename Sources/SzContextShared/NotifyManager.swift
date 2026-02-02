@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 class NotifyManager {
     static func messageNotify(message: String, inform: String, style: NSAlert.Style ) -> Bool {
