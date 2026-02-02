@@ -112,7 +112,7 @@ class PreferenceManager {
     
     static func set(for key: Key, with data: [AppWithOptions], updateIcon: Bool) {
         ud?.removeObject(forKey: key.rawValue)
-        #if canImport(CoreData) && !SWIFT_PACKAGE
+        #if !SWIFT_PACKAGE
         if updateIcon {
             let iconManager = IconCacheManager.init(name:"SzContext")
             for app in data {

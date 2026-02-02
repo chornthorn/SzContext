@@ -1,5 +1,5 @@
 //
-//  SzContextXPCProtocol.h
+//  SzContextXPCProtocol.swift
 //  SzContextXPC
 //
 //  Created by Jiawei Duan on 12/27/20.
