@@ -75,6 +75,10 @@ SzContext/
 └── SzContext.xcodeproj/       # Xcode project
 ```
 
+### Release Process
+
+This project includes an automated GitHub Actions workflow for building and releasing unsigned DMG files. See [RELEASE.md](RELEASE.md) for detailed instructions on creating releases.
+
 ### Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
