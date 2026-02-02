@@ -1,0 +1,125 @@
+# GitHub Workflow for Building and Releasing DMG
+# This workflow builds the SzContext app in unsigned mode and creates a DMG file
+
+name: Build and Release DMG
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.4, v1.5, etc.
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build-dmg:
+    name: Build DMG (Unsigned)
+    runs-on: macos-latest
+    
+    permissions:
+      contents: write  # Required to create releases and upload assets
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Display Xcode version
+      run: xcodebuild -version
+    
+    - name: Resolve Swift Package Dependencies
+      run: |
+        xcodebuild -resolvePackageDependencies -project SzContext.xcodeproj -scheme SzContext
+    
+    - name: Build SzContext App (Unsigned)
+      run: |
+        xcodebuild clean build \
+          -project SzContext.xcodeproj \
+          -scheme SzContext \
+          -configuration Release \
+          -derivedDataPath ./build \
+          CODE_SIGN_IDENTITY="-" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+    
+    - name: Locate built app
+      run: |
+        echo "Looking for built app..."
+        find ./build -name "SzContext.app" -type d
+        APP_PATH=$(find ./build -name "SzContext.app" -type d | head -n 1)
+        echo "APP_PATH=$APP_PATH" >> $GITHUB_ENV
+        echo "Found app at: $APP_PATH"
+    
+    - name: Verify app bundle
+      run: |
+        if [ -d "$APP_PATH" ]; then
+          echo "✓ App bundle exists"
+          ls -la "$APP_PATH"
+        else
+          echo "✗ App bundle not found!"
+          exit 1
+        fi
+    
+    - name: Create DMG
+      run: |
+        # Create a temporary directory for DMG contents
+        mkdir -p dmg_temp
+        
+        # Copy the app to the temp directory
+        cp -R "$APP_PATH" dmg_temp/
+        
+        # Create a symbolic link to Applications folder
+        ln -s /Applications dmg_temp/Applications
+        
+        # Get version from tag or use default
+        VERSION="${GITHUB_REF_NAME#v}"
+        if [ -z "$VERSION" ]; then
+          VERSION="latest"
+        fi
+        
+        DMG_NAME="SzContext-${VERSION}-unsigned.dmg"
+        
+        # Create the DMG
+        hdiutil create -volname "SzContext" \
+          -srcfolder dmg_temp \
+          -ov -format UDZO \
+          "$DMG_NAME"
+        
+        echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+        echo "✓ DMG created: $DMG_NAME"
+        ls -lh "$DMG_NAME"
+    
+    - name: Upload DMG as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SzContext-DMG
+        path: ${{ env.DMG_NAME }}
+        retention-days: 90
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ env.DMG_NAME }}
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        body: |
+          ## SzContext - Unsigned Build
+          
+          This is an unsigned build of SzContext for macOS.
+          
+          ### Installation
+          1. Download the DMG file
+          2. Open the DMG file
+          3. Drag SzContext.app to the Applications folder
+          4. Open SzContext.app (you may need to right-click and select "Open" the first time due to it being unsigned)
+          
+          ### Note
+          This build is unsigned and will require you to allow it in System Preferences > Security & Privacy when you first run it.
+          
+          For the signed version, please download from the Mac App Store.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
