@@ -25,6 +25,16 @@ DerivedData/
 ## Gcc Patch
 /*.gcno
 
+## Swift Package Manager
+.swiftpm/
+.build/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+*.xcodeproj/xcshareddata/swiftpm/
+
+## CocoaPods (Legacy - migrated to SPM)
+Pods/
+Podfile.lock
+
 ## zip file 
 *.zip
 *.dmg

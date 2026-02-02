@@ -1,0 +1,43 @@
+/* No comment provided by engineer. */
+"extension.openWithPre" = "Open in ";
+
+/* No comment provided by engineer. */
+"general.Cancel" = "Cancel";
+
+/* No comment provided by engineer. */
+"general.Confirm" = "Confirm";
+
+/* 
+  Localizable.strings
+  SzContext
+
+  Created by Jiawei Duan on 1/3/21.
+  Copyright © 2021 Jiawei Duan. All rights reserved.
+*/
+"general.extensionEnabled" = "Extension Enabled";
+"general.extensionNotEnabled" = "Extension Not Enabled";
+
+"general.accessFolderGranted" = "Folder access is granted";
+"general.accessFolderNotGranted" = "Folder access is not granted";
+
+"general.addChilderOfExistingFolder" = "You are adding a folder which is the child of the granted folders, no need to add anymore";
+
+/* No comment provided by engineer. */
+"general.OK" = "OK";
+
+"informational.updateUserDefaultsSuccessTitle" = "User defaults version update successfully";
+"informational.updateUserDefaultsSuccessInfo" = "We have successfully updated our database for storing your settigs, but if you have encountered any problem in using SzContext, please reset the preference.";
+
+"informational.updateUserDefaultsFailTitle" = "User defaults version update failed";
+"informational.updateUserDefaultsFailInfo" = "We are sorry that SzContext failed to update our database for storing your settigs, please reset settings to make SzContext work";
+
+"informational.appAddError" = "Sorry, only Application is supported";
+
+/* No comment provided by engineer. */
+"instruction.openFolder" = "Please grant folder access you wish SzContext to appear";
+
+/* No comment provided by engineer. */
+"warning.resetPreference" = "Do you want to reset the SzContext preference to default? All info including directory access will be erased.";
+
+/* No comment provided by engineer. */
+"extension.openWithPost" = "";
