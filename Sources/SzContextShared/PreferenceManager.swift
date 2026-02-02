@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Cocoa
+import AppKit
 
 class PreferenceManager {
     static private var ud = UserDefaults.init(suiteName: APP_GROUP)
@@ -112,12 +112,14 @@ class PreferenceManager {
     
     static func set(for key: Key, with data: [AppWithOptions], updateIcon: Bool) {
         ud?.removeObject(forKey: key.rawValue)
+        #if !SWIFT_PACKAGE
         if updateIcon {
             let iconManager = IconCacheManager.init(name:"SzContext")
             for app in data {
                 iconManager.addPersistentIcon(appURL: app.app)
             }
         }
+        #endif
         ud?.setValue(try? PropertyListEncoder().encode(data), forKey: key.rawValue)
     }
     

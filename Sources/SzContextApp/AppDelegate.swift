@@ -8,7 +8,6 @@
 import Foundation
 import Cocoa
 import ServiceManagement
-import LQ3C7Y6F8J_com_roadtodream_SzContextXPCHelper
 import FinderSync
 import OSLog
 
